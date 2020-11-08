@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+	<title>COVID-19 DATA API</title>
+	<meta charset="utf-8"/>
+	<script>
+		function getData() {
+			//1. Make request object
+			ajaxRequest = new XMLHttpRequest();
+			console.log("1: request object created");
+ 
+			// Step 2: Set the URL for the AJAX request to be the JSON file
+            ajaxRequest.open("GET", "https://covid19-api.com/country?name=United%20States%20of%20America&format=json", true)
+
+			console.log("2: Request file opened");
+ 
+			//Step 3: set up event handler/callback
+			ajaxRequest.onreadystatechange = function() {
+				console.log("3: readystatechange event fired");
+ 
+                //Step 5: wait for done + success
+				if (ajaxRequest.readyState == 4 && ajaxRequest.status == 200) {
+					console.log("5 - response received");
+					var result = JSON.parse(ajaxRequest.responseText);
+                    result = result[0];
+                    console.log(result)
+                    document.getElementById("data").innerHTML = 
+						"Country: " + result.country + "<br>" + 
+						"Confirmed Cases: " + parseInt(result.confirmed).toLocaleString() + "<br>" +
+						"Critical Cases: " + parseInt(result.critical).toLocaleString() + "<br>" +
+						"Deaths: " + parseInt(result.deaths).toLocaleString() + "<br>" +
+						"Recovered: " + parseInt(result.recovered).toLocaleString();
+                    		
+				} else if (ajaxRequest.readyState == 4 && ajaxRequest.status != 200) {
+
+					document.getElementById("data").innerHTML = "Something went wrong";
+
+				} else if (ajaxRequest.readyState == 3) {
+
+					document.getElementById("data").innerHTML = "Too soon! Try again";
+
+				}
+
+			}
+			// Step 4: fire off the HTTP request
+			ajaxRequest.send();
+			console.log("4: Request sent");
+		}
+	</script>
+</head>
+
+
+<body onload="getData()">
+
+	<h1>Covid Data</h1>
+	<div id="data">Loading...</div>
+</body>
+</html>
