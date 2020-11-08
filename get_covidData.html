@@ -3,6 +3,7 @@
 <head>
 	<title>COVID-19 DATA API</title>
 	<meta charset="utf-8"/>
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
 	<script>
 		function getData() {
 			//1. Make request object
@@ -24,12 +25,21 @@
 					var result = JSON.parse(ajaxRequest.responseText);
                     result = result[0];
                     console.log(result)
+					
+					function extractTime (time) {
+						var index = time.indexOf("T")
+						var date = time.substring(0, index)
+						return date;
+					}
+					//Retrieve specific data from object
                     document.getElementById("data").innerHTML = 
-						"Country: " + result.country + "<br>" + 
-						"Confirmed Cases: " + parseInt(result.confirmed).toLocaleString() + "<br>" +
-						"Critical Cases: " + parseInt(result.critical).toLocaleString() + "<br>" +
-						"Deaths: " + parseInt(result.deaths).toLocaleString() + "<br>" +
-						"Recovered: " + parseInt(result.recovered).toLocaleString();
+						"<span id='key'>Country: </span>" + result.country + "<br>" + 
+						//toLocaleString is a thousands separator
+						"<span id='key'>Confirmed Cases: </span>" + parseInt(result.confirmed).toLocaleString() + "<br>" +
+						"<span id='key'>Critical Cases: </span>" + parseInt(result.critical).toLocaleString() + "<br>" +
+						"<span id='key'>Deaths: </span>" + parseInt(result.deaths).toLocaleString() + "<br>" +
+						"<span id='key'>Recovered: </span>" + parseInt(result.recovered).toLocaleString() + "<br>" +
+						"<span id='key'>Last Updated: </span>" + extractTime(result.lastChange);
                     		
 				} else if (ajaxRequest.readyState == 4 && ajaxRequest.status != 200) {
 
@@ -50,9 +60,49 @@
 </head>
 
 
+<style>
+	body {
+		font-family: 'Montserrat', sans-serif;
+		padding: 10px;
+		line-height: 30px;
+	}
+
+	#data {
+		letter-spacing: 1.5px;
+	}
+
+	#key{
+		font-size: 20px;
+		font-weight: 700;
+	}
+</style>
+
 <body onload="getData()">
 
-	<h1>Covid Data</h1>
+	<h1>COVID-19 Data API</h1>
 	<div id="data">Loading...</div>
+	<div id="assignment">
+		<h2>Assignment Specifics</h2>
+		<ul>
+			<li>
+				The API I selected provides information about Coronavirus disease around the world. It returns COVID-19
+				statistics and information relative to a chosen country.
+			</li>
+			<li>
+				The API is from <a href="https://covid19-api.com/docs">here</a>
+			</li>
+			<li>
+				For the API request, I decided to use most of the options available to me as they all provided
+				critical information regarding COVID-19 in a specific country. These options include the country's
+				name, number of confirmed COVID-19 cases, critical cases, deaths, recovered patients, and the date
+				of which the information was last updated.
+			</li>
+			<li>
+				This API would be helpful for creating a COVID-19 dashboard of several countries as it automatically
+				retrieves updated data. This API would also be helpful for sending out daily updates/texts about
+				COVID-19 in one's country.
+			</li>
+		</ul>
+	</div>
 </body>
 </html>
